@@ -19,23 +19,23 @@ const (
 
 func parseTraining(data string) (steps int, activity string, duration time.Duration, err error) {
 	if strings.ContainsAny(data, " \t\n\r") {
-		return 0, "",  0, fmt.Errorf("неверный формат данных")
+		return 0, "",  0, fmt.Errorf("1")
 	}
 
 	parts := strings.Split(data, ",")
 	if len(parts) != 3 { // Теперь ожидаем 3 параметра: тип, шаги, длительность
-		return 0, "", 0, errors.New("неверный формат данных")
+		return 0, "", 0, errors.New("2")
 	}
 
 	activity = parts[0]
 	steps, err = strconv.Atoi(parts[1])
 	if err != nil || steps <= 0 {
-		return 0, "", 0, fmt.Errorf("неверный формат данных")
+		return 0, "", 0, fmt.Errorf("3")
 	}
 
 	duration, err = time.ParseDuration(parts[2])
 	if err != nil || duration <= 0 {
-		return 0, "", 0, fmt.Errorf("неверный формат данных")
+		return 0, "", 0, fmt.Errorf("4")
 	}
 
 	return steps, activity, duration, nil
