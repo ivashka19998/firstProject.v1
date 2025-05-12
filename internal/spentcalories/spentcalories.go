@@ -27,7 +27,7 @@ func parseTraining(data string) (steps int, activity string, duration time.Durat
 		return 0, "", 0, errors.New("2")
 	}
 
-	activity = parts[0]
+	activity = parts[1]
 	steps, err = strconv.Atoi(parts[0])
 	if err != nil || steps <= 0 {
 		return 0, "", 0, fmt.Errorf("3")
@@ -38,7 +38,7 @@ func parseTraining(data string) (steps int, activity string, duration time.Durat
 		return 0, "", 0, fmt.Errorf("4")
 	}
 
-	return steps, activity, duration, nil
+	return steps, activity, duration, err
 }
 
 func distance(steps int, height float64) float64 {
@@ -72,10 +72,11 @@ func TrainingInfo(data string, weight, height float64) (string, error) {
 	default:
 		return "", errors.New("неизвестный тип тренировки")
 	}
-
+	
 	if err != nil {
 		return "", err
 	}
+	
 
 	return fmt.Sprintf(
 		"Тип тренировки: %s\nДлительность: %.2f ч.\nДистанция: %.2f км.\nСкорость: %.2f км/ч\nСожгли калорий: %.2f\n",
