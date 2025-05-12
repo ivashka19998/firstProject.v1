@@ -17,28 +17,28 @@ const (
 	walkingCaloriesCoefficient = 0.5  // коэффициент для расчета калорий при ходьбе
 )
 
-func parseTraining(data string) (activity string, steps int, duration time.Duration, err error) {
+func parseTraining(data string) (steps int, activity string, duration time.Duration, err error) {
 	if strings.ContainsAny(data, " \t\n\r") {
-		return "", 0, 0, fmt.Errorf("неверный формат данных")
+		return 0, "",  0, fmt.Errorf("неверный формат данных")
 	}
 
 	parts := strings.Split(data, ",")
 	if len(parts) != 3 { // Теперь ожидаем 3 параметра: тип, шаги, длительность
-		return "", 0, 0, errors.New("неверный формат данных")
+		return 0, "", 0, errors.New("неверный формат данных")
 	}
 
 	activity = parts[0]
 	steps, err = strconv.Atoi(parts[1])
 	if err != nil || steps <= 0 {
-		return "", 0, 0, fmt.Errorf("неверный формат данных")
+		return 0, "", 0, fmt.Errorf("неверный формат данных")
 	}
 
 	duration, err = time.ParseDuration(parts[2])
 	if err != nil || duration <= 0 {
-		return "", 0, 0, fmt.Errorf("неверный формат данных")
+		return 0, "", 0, fmt.Errorf("неверный формат данных")
 	}
 
-	return activity, steps, duration, nil
+	return steps, activity, duration, nil
 }
 
 func distance(steps int, height float64) float64 {
@@ -55,7 +55,7 @@ func meanSpeed(steps int, height float64, duration time.Duration) float64 {
 }
 func TrainingInfo(data string, weight, height float64) (string, error) {
 	// TODO: реализовать функцию
-	activity, steps, duration, err := parseTraining(data)
+	steps, activity, duration, err := parseTraining(data)
 	if err != nil {
 		return "", err
 	}
