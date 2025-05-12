@@ -18,22 +18,22 @@ const (
 
 func parsePackage(data string) (steps int, duration time.Duration, err error) {
 	if strings.ContainsAny(data, " \t\n\r") {
-		return 0, 0, fmt.Errorf("неверный формат данных")
+		return 0, 0, fmt.Errorf("")
 	}
 
 	parts := strings.Split(data, ",")
 	if len(parts) != 2 {
-		return 0, 0, fmt.Errorf("неверный формат данных")
+		return 0, 0, fmt.Errorf("")
 	}
 
 	steps, err = strconv.Atoi(parts[0])
 	if err != nil || steps <= 0 {
-		return 0, 0, fmt.Errorf("неверный формат данных")
+		return 0, 0, fmt.Errorf("")
 	}
 
 	duration, err = time.ParseDuration(parts[1])
 	if err != nil || duration <= 0 {
-		return 0, 0, fmt.Errorf("неверный формат данных")
+		return 0, 0, fmt.Errorf("")
 	}
 
 	return steps, duration, nil
