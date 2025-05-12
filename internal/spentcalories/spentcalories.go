@@ -28,7 +28,7 @@ func parseTraining(data string) (steps int, activity string, duration time.Durat
 	}
 
 	activity = parts[0]
-	steps, err = strconv.Atoi(parts[1])
+	steps, err = strconv.Atoi(parts[0])
 	if err != nil || steps <= 0 {
 		return 0, "", 0, fmt.Errorf("3")
 	}
