@@ -28,7 +28,7 @@ func parsePackage(data string) (steps int, duration time.Duration, err error) {
 
 	steps, err = strconv.Atoi(parts[0])
 	if err != nil || steps <= 0 {
-		return 0, 0, fmt.Errorf("")
+		return 0, 0, err
 	}
 
 	duration, err = time.ParseDuration(parts[1])
@@ -43,7 +43,7 @@ func DayActionInfo(data string, weight, height float64) string {
 	// TODO: реализовать функцию
 	steps, duration, err := parsePackage(data)
 	if err != nil {
-		return fmt.Sprint(err)
+		return err.Error()
 	}
 
 	distance := float64(steps) * stepLength / mInKm
