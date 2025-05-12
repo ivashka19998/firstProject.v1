@@ -43,7 +43,7 @@ func DayActionInfo(data string, weight, height float64) string {
 	// TODO: реализовать функцию
 	steps, duration, err := parsePackage(data)
 	if err != nil {
-		return fmt.Sprintf("", err)
+		return ""
 	}
 
 	distance := float64(steps) * stepLength / mInKm
