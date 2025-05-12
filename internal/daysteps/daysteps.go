@@ -16,25 +16,24 @@ const (
 	mInKm = 1000
 )
 
-func parsePackage(data string) (int, time.Duration, error) {
-	// TODO: реализовать функцию
+func parsePackage(data string) (steps int, duration time.Duration, err error) {
+	if strings.ContainsAny(data, " \t\n\r") {
+		return 0, 0, fmt.Errorf("неверный формат данных")
+	}
+
 	parts := strings.Split(data, ",")
 	if len(parts) != 2 {
 		return 0, 0, fmt.Errorf("неверный формат данных")
 	}
 
-	steps, err := strconv.Atoi(strings.TrimSpace(parts[0]))
-	if err != nil {
-		return 0, 0, fmt.Errorf("ошибка парсинга шагов: %v", err)
+	steps, err = strconv.Atoi(parts[0])
+	if err != nil || steps <= 0 {
+		return 0, 0, fmt.Errorf("неверный формат данных")
 	}
 
-	if steps <= 0 {
-		return 0, 0, fmt.Errorf("количество шагов должно быть положительным")
-	}
-
-	duration, err := time.ParseDuration(strings.TrimSpace(parts[1]))
-	if err != nil {
-		return 0, 0, fmt.Errorf("ошибка парсинга времени: %v", err)
+	duration, err = time.ParseDuration(parts[1])
+	if err != nil || duration <= 0 {
+		return 0, 0, fmt.Errorf("неверный формат данных")
 	}
 
 	return steps, duration, nil
@@ -53,6 +52,6 @@ func DayActionInfo(data string, weight, height float64) string {
 		return fmt.Sprintf("Ошибка расчета калорий: %v", err)
 	}
 
-	return fmt.Sprintf("Количество шагов: %d.\nДистанция составила %.2f км.\nВы сожгли %.2f ккал.",
+	return fmt.Sprintf("Количество шагов: %d.\nДистанция составила %.2f км.\nВы сожгли %.2f ккал.\n",
 		steps, distance, calories)
 }

@@ -17,25 +17,28 @@ const (
 	walkingCaloriesCoefficient = 0.5  // коэффициент для расчета калорий при ходьбе
 )
 
-func parseTraining(data string) (int, string, time.Duration, error) {
-	// TODO: реализовать функцию
+func parseTraining(data string) (activity string, steps int, duration time.Duration, err error) {
+	if strings.ContainsAny(data, " \t\n\r") {
+		return "", 0, 0, fmt.Errorf("неверный формат данных")
+	}
+
 	parts := strings.Split(data, ",")
-	if len(parts) != 3 {
-		return 0, "", 0, errors.New("неверный формат данных")
+	if len(parts) != 3 { // Теперь ожидаем 3 параметра: тип, шаги, длительность
+		return "", 0, 0, errors.New("неверный формат данных")
 	}
 
-	steps, err := strconv.Atoi(strings.TrimSpace(parts[0]))
-	if err != nil {
-		return 0, "", 0, fmt.Errorf("ошибка парсинга шагов: %v", err)
+	activity = parts[0]
+	steps, err = strconv.Atoi(parts[1])
+	if err != nil || steps <= 0 {
+		return "", 0, 0, fmt.Errorf("неверный формат данных")
 	}
 
-	activity := strings.TrimSpace(parts[1])
-	duration, err := time.ParseDuration(strings.TrimSpace(parts[2]))
-	if err != nil {
-		return 0, "", 0, fmt.Errorf("ошибка парсинга времени: %v", err)
+	duration, err = time.ParseDuration(parts[2])
+	if err != nil || duration <= 0 {
+		return "", 0, 0, fmt.Errorf("неверный формат данных")
 	}
 
-	return steps, activity, duration, nil
+	return activity, steps, duration, nil
 }
 
 func distance(steps int, height float64) float64 {
@@ -45,16 +48,14 @@ func distance(steps int, height float64) float64 {
 }
 
 func meanSpeed(steps int, height float64, duration time.Duration) float64 {
-	// TODO: реализовать функцию
-	if duration == 0 {
+	if duration <= 0 || steps <= 0 {
 		return 0
 	}
 	return distance(steps, height) / duration.Hours()
 }
-
 func TrainingInfo(data string, weight, height float64) (string, error) {
-	// TODO: реализовать функцию
-	steps, activity, duration, err := parseTraining(data)
+	// TODO: реализовать функциЮ
+	activity, steps, duration, err := parseTraining(data)
 	if err != nil {
 		return "", err
 	}
@@ -77,7 +78,7 @@ func TrainingInfo(data string, weight, height float64) (string, error) {
 	}
 
 	return fmt.Sprintf(
-		"Тип тренировки: %s\nДлительность: %.2f ч.\nДистанция: %.2f км.\nСкорость: %.2f км/ч\nСожгли калорий: %.2f",
+		"Тип тренировки: %s\nДлительность: %.2f ч.\nДистанция: %.2f км.\nСкорость: %.2f км/ч\nСожгли калорий: %.2f\n",
 		activity,
 		duration.Hours(),
 		dist,
